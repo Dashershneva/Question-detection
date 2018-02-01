@@ -16,7 +16,7 @@ def  get_questions(subtitle):
     correct_diration = {}
     i = 0
     for line in lines:
-        if '?' in line and lines[i-1].startswith('0'):
+        if ' ?' in line and lines[i-1].startswith('0'):
             text = line
             text = text.rstrip()
             dur = lines[i-1]
