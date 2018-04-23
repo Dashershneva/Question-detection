@@ -1,15 +1,15 @@
 import os
 import csv
 
-all_audio = os.listdir('C:/Users/dsher/PycharmProjects/speech_recognition/questions_wav')
+all_audio = os.listdir('C:/Users/dsher/PycharmProjects/speech_recognition/cut_sent')
 
 
 def write_scp(all_audio):
     i = 1
     for path in all_audio:
-        with open('questions.scp', 'a', encoding='utf-8', newline='') as csvfile:
+        with open('cut_questions.scp', 'a', encoding='utf-8', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            string = str(str(i) + ' sox ' + "Audio\\Questions_cut\\" + str(path) + ' -r 16000 -b 16 -c 1 -t wav - |')
+            string = str(str(i) + ' sox ' + "cut_sent\\" + str(path) + ' -r 16000 -b 16 -c 1 -t wav - |')
             writer.writerow(string)
             print(string)
         i+=1
