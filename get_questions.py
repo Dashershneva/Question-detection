@@ -4,22 +4,19 @@ import os
 import csv
 import re
 
-transcripts = os.listdir(path="C:/Users/dsher/PycharmProjects/speech_recognition/transcripts")
-audios = os.listdir(path="C:/Users/dsher/PycharmProjects/speech_recognition/audio")
+transcripts = os.listdir(path="transcripts")
+audios = os.listdir(path="audio")
 
 file_names = []
-with open('C:/Users/dsher/PycharmProjects/speech_recognition/questions_subtitles.csv', 'r', encoding='utf-8') as csvfile:
+with open('C:/Users/dsher/PycharmProjects/speech_recognition/sentences_subtitles.csv', 'r', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile, delimiter='\t')
     for row in reader:
         file_names.append(row['path'])
 
-    with open('questions_subtitles_updated.csv', 'a', encoding='utf-8', newline='') as new_csvfile:
-        fieldnames = ['path', 'transcript', 't1', 't2', 'quest_num']
-        writer = csv.DictWriter(new_csvfile, fieldnames=fieldnames, delimiter='\t')
-        writer.writeheader()
-
-
-#print(set(file_names))
+with open('questions_subtitles_updated.csv', 'a', encoding='utf-8', newline='') as new_csvfile:
+    fieldnames = ['path', 'transcript', 't1', 't2', 'quest_num']
+    writer = csv.DictWriter(new_csvfile, fieldnames=fieldnames, delimiter='\t')
+    writer.writeheader()
 
 
 # get all questions and their durations from subtitles
@@ -56,10 +53,11 @@ def process_audio(audio):
 
 # cut questions in .wav from big audiofiles
 def sample_questions():
-    with open('C:/Users/dsher/PycharmProjects/speech_recognition/questions_subtitles.csv', 'r',
+    with open('sentences_subtitles.csv', 'r',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
         i = 0
+        n = 0
         for row in reader:
             t1 = row['t1']
             t1 = float(t1)*1000
@@ -68,18 +66,20 @@ def sample_questions():
             t2 = float(t2)*1000
             t2 = int(t2)
             # print(i, row['path'], t1, t2)
-            if row['path'] + ".wav" in audios:
+            if row['path'] + ".wav" in audios and t1!=t2:
                 audio = "audio/" + row['path'] + '.wav'
-                neqst = 'questions_wav/%s_question_%s.wav' %(row['path'],str(i))
+                neqst = 'questions_wav/%s_sentence_%s.wav' %(row['path'],str(i))
                 readAudio= AudioSegment.from_wav(audio)
                 newAudio = readAudio[t1:t2]
                 print(i, audio, t1, t2, len(readAudio), len(newAudio))
-                newQuestion = newAudio.export('questions_wav/%s_question_%s.wav' %(row['path'],str(i)), format='wav')
+                newQuestion = newAudio.export('questions_wav/%s_sentence_%s.wav' %(row['path'],str(i)), format='wav')
+                """
                 with open('questions_subtitles_updated.csv', 'a', encoding='utf-8', newline='') as new_csvfile:
                     fieldnames = ['path', 'transcript', 't1', 't2', 'quest_num']
                     writer = csv.DictWriter(new_csvfile, fieldnames=fieldnames, delimiter='\t')
                     writer.writerow({'path': row['path'], 'transcript': row['transcript'],
                                      't1': row['t1'], 't2': row['t2'], 'quest_num': neqst})
+                                     """
             i+=1
     return  reader
 
