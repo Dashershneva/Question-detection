@@ -13,7 +13,9 @@ To run the model you need to have module tensorflow version 1.2 or higher.
 There ate three types of models: acoustic, lexical or hybrid. To choose the model select one of the following modes:
 
 MODE = MODE_ACOUSTIC
+
 MODE = MODE_TEXT
+
 MODE = MODE_HYBRID
 
 Firstly, model processes the input data and parses it into named tuples. At this point model excludes sentences with mistakes in alignments and sentences longer than 30 words.
